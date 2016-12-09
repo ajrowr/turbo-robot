@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+import yaml, json, sys, os
+
+env = lambda k: os.environ.get(k)
+content_type = lambda t: "Content-Type: {}\n".format(t)
+
+if env('SERVER_NAME'):
+    print content_type('application/json')
+    path = os.path.join(os.getcwd(), 'testdata', env('SERVER_NAME'))
+    dats = []
+    for f in os.listdir(path):
+        try:
+            dat = yaml.load(open(os.path.join(path, f)))
+            if dat:
+                dats.append(dat)
+        except:
+            pass
+        
+    json.dump(dats, sys.stdout)
+    
